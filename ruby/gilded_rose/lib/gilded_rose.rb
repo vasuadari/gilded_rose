@@ -5,55 +5,40 @@ class GildedRose
 
   class Error < StandardError; end
 
-  def initialize(items = [])
+  module ItemNames
+    AGED_BRIE = 'Aged Brie'
+    BACKSTAGE_PASSES = 'Backstage passes to a TAFKAL80ETC concert'
+    SULFURAS = 'Sulfuras, Hand of Ragnaros'
+  end
+
+  module DefaultQuality
+    SULFURAS = 80
+  end
+
+  def initialize(items)
     @items = items
   end
 
   def update_quality
-    @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
-        if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
-            item.quality = item.quality - 1
-          end
-        end
-      else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 10
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 5
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
-      end
-      if item.name != "Sulfuras, Hand of Ragnaros"
-        item.sell_in = item.sell_in - 1
-      end
-      if item.sell_in < 0
-        if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
-            if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
-                item.quality = item.quality - 1
-              end
-            end
-          else
-            item.quality = item.quality - item.quality
-          end
+    @items.each do | item|
+      updatable_item =
+        case item.name
+        when ItemNames::AGED_BRIE
+          GildedRose::Items::AgedBrie.new(item)
+        when ItemNames::BACKSTAGE_PASSES
+          GildedRose::Items::BackstagePasses.new(item)
+        when ItemNames::SULFURAS
+          GildedRose::Items::Sulfuras.new(item)
         else
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
+          GildedRose::Items::UpdatableItem.new(item)
         end
-      end
+
+      updatable_item.update()
     end
   end
 end
+
+require 'gilded_rose/items/updatable_item'
+require 'gilded_rose/items/aged_brie'
+require 'gilded_rose/items/backstage_passes'
+require 'gilded_rose/items/sulfuras'
