@@ -5,18 +5,20 @@ class GildedRose
         @item = item
       end
 
+      def calculate_quality_change
+        change = -1
+        change = -2 if @item.sell_in < 0
+        change
+      end
+
       def update
-        sell_in = @item.sell_in
-        quality = @item.quality
+        @item.sell_in -= 1
 
-        sell_in -= 1
+        quality_change = calculate_quality_change()
 
-        quality -= 1 if quality > 0
+        new_quality = @item.quality + quality_change
 
-        quality -= 1 if sell_in < 0 && quality > 0
-
-        @item.quality = quality
-        @item.sell_in = sell_in
+        @item.quality = [[new_quality, 0].max, 50].min
       end
     end
   end
