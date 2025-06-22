@@ -184,5 +184,15 @@ RSpec.describe GildedRose do
         expect(items[0].quality).to eq 4
       end
     end
+
+    context 'conjured' do
+      it 'quality reduces twice as fast for conjured item' do
+        items = [Item.new('Conjured eggs', 1, 50)]
+
+        GildedRose.new(items).update_quality()
+
+        expect(items[0].quality).to eq 48
+      end
+    end
   end
 end

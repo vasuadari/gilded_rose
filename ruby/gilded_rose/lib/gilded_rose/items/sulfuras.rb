@@ -7,6 +7,9 @@ class GildedRose
         @item.quality = GildedRose::DefaultQuality::SULFURAS
       end
 
+      def age_item
+        # Sulfuras doesn't age hence left empty
+      end
 
       def calculate_quality_change
         # Since, update is skipped this can be left empty

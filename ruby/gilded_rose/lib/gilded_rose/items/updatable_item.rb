@@ -1,6 +1,8 @@
 class GildedRose
   module Items
     class UpdatableItem
+      attr_accessor :item
+
       def initialize(item)
         @item = item
       end
@@ -11,14 +13,14 @@ class GildedRose
         change
       end
 
+      def age_item
+        self.item.sell_in -= 1
+      end
+
       def update
-        @item.sell_in -= 1
+        age_item()
 
-        quality_change = calculate_quality_change()
-
-        new_quality = @item.quality + quality_change
-
-        @item.quality = [[new_quality, 0].max, 50].min
+        QualityManager.reduce_quality(self.item, calculate_quality_change())
       end
     end
   end
