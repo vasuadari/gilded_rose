@@ -88,7 +88,7 @@ bundle install
 bundle exec rspec
 ```
 
-## For daily simulation
+## Simulate daily updates via CLI:
 
 ```bash
 bundle install
