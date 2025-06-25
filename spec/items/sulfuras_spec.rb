@@ -22,9 +22,7 @@ RSpec.describe GildedRose::Items::Sulfuras do
       item = Item.new('eggs', nil, 1)
       updatable_item = GildedRose::Items::Sulfuras.new(item)
 
-      expect { updatable_item.calculate_quality_change() }.not_to(
-        raise_error(NoMethodError)
-      )
+      expect { updatable_item.calculate_quality_change() }.not_to(raise_error)
     end
   end
 
